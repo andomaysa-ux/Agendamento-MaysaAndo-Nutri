@@ -8,6 +8,21 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --accent: #38bdf8;
+    --accent-dim: rgba(56,189,248,.08);
+    --accent-border: rgba(56,189,248,.3);
+    --surface: rgba(15,20,35,.75);
+    --border: rgba(255,255,255,.07);
+    --text-primary: #f1f5f9;
+    --text-secondary: #64748b;
+    --text-muted: #475569;
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  html { scroll-behavior: smooth; }
+
   body {
     font-family: 'Poppins', sans-serif;
     background: #080c14;
@@ -19,7 +34,7 @@
     overflow-x: hidden;
   }
 
-  /* ambient blobs */
+  /* Animated ambient blobs */
   body::before, body::after {
     content: '';
     position: fixed;
@@ -27,16 +42,47 @@
     filter: blur(120px);
     pointer-events: none;
     z-index: 0;
+    animation: floatBlob 8s ease-in-out infinite alternate;
   }
   body::before {
     width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(56,189,248,.09) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(56,189,248,.12) 0%, transparent 70%);
     top: -100px; left: -100px;
+    animation-duration: 9s;
   }
   body::after {
     width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(139,92,246,.07) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(139,92,246,.1) 0%, transparent 70%);
     bottom: -80px; right: -80px;
+    animation-duration: 11s;
+    animation-direction: alternate-reverse;
+  }
+
+  @keyframes floatBlob {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, 20px) scale(1.08); }
+  }
+
+  /* PAGE ENTER ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.93) translateY(16px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes slideRight {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
   }
 
   .section-wrapper {
@@ -56,6 +102,7 @@
     align-items: center;
     gap: 10px;
     opacity: .85;
+    animation: slideRight .7s var(--ease-smooth) both;
   }
   .section-label::before {
     content: '';
@@ -81,6 +128,7 @@
     line-height: 1.2;
     margin-bottom: 18px;
     letter-spacing: -.5px;
+    animation: fadeUp .8s var(--ease-smooth) .1s both;
   }
 
   .left p {
@@ -88,6 +136,7 @@
     color: #64748b;
     line-height: 1.8;
     margin-bottom: 38px;
+    animation: fadeUp .8s var(--ease-smooth) .2s both;
   }
 
   .left p strong {
@@ -108,6 +157,17 @@
     font-size: 0.875rem;
     color: #94a3b8;
     line-height: 1.55;
+    animation: fadeUp .7s var(--ease-smooth) both;
+    transition: color .3s var(--ease-smooth), transform .3s var(--ease-smooth);
+  }
+  .check-item:nth-child(1) { animation-delay: .3s; }
+  .check-item:nth-child(2) { animation-delay: .4s; }
+  .check-item:nth-child(3) { animation-delay: .5s; }
+  .check-item:nth-child(4) { animation-delay: .6s; }
+
+  .check-item:hover {
+    color: #cbd5e1;
+    transform: translateX(4px);
   }
 
   .check-icon {
@@ -120,6 +180,13 @@
     align-items: center;
     justify-content: center;
     margin-top: 1px;
+    transition: background .3s, border-color .3s, transform .3s var(--ease-spring), box-shadow .3s;
+  }
+  .check-item:hover .check-icon {
+    background: rgba(56,189,248,.18);
+    border-color: rgba(56,189,248,.5);
+    transform: scale(1.15);
+    box-shadow: 0 0 12px rgba(56,189,248,.2);
   }
 
   .check-icon svg { color: #38bdf8; }
@@ -135,9 +202,24 @@
       0 0 0 1px rgba(56,189,248,.04),
       0 24px 64px rgba(0,0,0,.5),
       inset 0 1px 0 rgba(255,255,255,.06);
+    animation: scaleIn .9s var(--ease-smooth) .15s both;
+    transition: box-shadow .5s var(--ease-smooth), border-color .5s;
+  }
+  .card:hover {
+    box-shadow:
+      0 0 0 1px rgba(56,189,248,.08),
+      0 32px 80px rgba(0,0,0,.6),
+      inset 0 1px 0 rgba(255,255,255,.08);
   }
 
-  .form-group { margin-bottom: 28px; }
+  .form-group {
+    margin-bottom: 28px;
+    animation: fadeUp .6s var(--ease-smooth) both;
+  }
+  .form-group:nth-child(1) { animation-delay: .35s; }
+  .form-group:nth-child(2) { animation-delay: .45s; }
+  .form-group:nth-child(3) { animation-delay: .55s; }
+  .form-group:nth-child(4) { animation-delay: .65s; }
 
   .form-group label {
     display: block;
@@ -147,7 +229,9 @@
     color: #475569;
     margin-bottom: 10px;
     font-weight: 600;
+    transition: color .3s;
   }
+  .form-group:focus-within label { color: #7dd3fc; }
 
   .form-group input,
   .form-group textarea {
@@ -160,7 +244,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 0.92rem;
     outline: none;
-    transition: border-color .25s, box-shadow .25s, background .25s;
+    transition: border-color .3s var(--ease-smooth), box-shadow .3s var(--ease-smooth), background .3s, transform .2s var(--ease-smooth);
   }
 
   .form-group input::placeholder,
@@ -171,6 +255,7 @@
     border-color: rgba(56,189,248,.45);
     background: rgba(56,189,248,.04);
     box-shadow: 0 0 0 4px rgba(56,189,248,.06);
+    transform: translateY(-1px);
   }
 
   .form-group textarea { resize: none; height: 110px; }
@@ -192,7 +277,7 @@
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all .25s;
+    transition: all .35s var(--ease-smooth);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -201,20 +286,41 @@
     overflow: hidden;
   }
 
-  .turno-btn .icon { font-size: 1.4rem; }
+  .turno-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(56,189,248,.12) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity .35s;
+  }
+
+  .turno-btn .icon {
+    font-size: 1.4rem;
+    transition: transform .4s var(--ease-spring);
+  }
 
   .turno-btn:hover {
     border-color: rgba(56,189,248,.35);
     color: #7dd3fc;
     background: rgba(56,189,248,.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
   }
+  .turno-btn:hover::before { opacity: 1; }
+  .turno-btn:hover .icon { transform: scale(1.2) rotate(-5deg); }
+
+  .turno-btn:active { transform: scale(.97) translateY(0); }
 
   .turno-btn.selected {
     border-color: rgba(56,189,248,.5);
     background: rgba(56,189,248,.08);
     color: #38bdf8;
-    box-shadow: 0 0 20px rgba(56,189,248,.08);
+    box-shadow: 0 0 24px rgba(56,189,248,.1), 0 8px 24px rgba(0,0,0,.3);
+    transform: translateY(-2px);
   }
+  .turno-btn.selected::before { opacity: 1; }
+  .turno-btn.selected .icon { transform: scale(1.15); }
 
   .turno-btn.selected::after {
     content: '';
@@ -222,11 +328,17 @@
     top: -30px; left: 50%;
     transform: translateX(-50%);
     width: 60px; height: 60px;
-    background: radial-gradient(circle, rgba(56,189,248,.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(56,189,248,.25) 0%, transparent 70%);
     border-radius: 50%;
+    animation: pulseGlow 2s ease-in-out infinite;
   }
 
-  /* SUBMIT — white shiny */
+  @keyframes pulseGlow {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    50% { transform: translateX(-50%) scale(1.4); opacity: .5; }
+  }
+
+  /* SUBMIT — white shiny Apple-style */
   .btn-submit {
     width: 100%;
     margin-top: 10px;
@@ -242,11 +354,12 @@
     position: relative;
     overflow: hidden;
     letter-spacing: .2px;
-    transition: transform .15s, box-shadow .25s;
+    transition: transform .2s var(--ease-spring), box-shadow .3s var(--ease-smooth);
     box-shadow:
       0 0 0 1px rgba(255,255,255,.15),
       0 4px 20px rgba(255,255,255,.12),
       0 1px 3px rgba(0,0,0,.3);
+    animation: fadeUp .6s var(--ease-smooth) .75s both;
   }
 
   /* shine sweep */
@@ -258,22 +371,21 @@
     background: linear-gradient(
       105deg,
       transparent 30%,
-      rgba(255,255,255,.55) 50%,
+      rgba(255,255,255,.6) 50%,
       transparent 70%
     );
-    transition: left .55s ease;
+    transition: left .6s ease;
   }
 
   .btn-submit:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     box-shadow:
       0 0 0 1px rgba(255,255,255,.2),
-      0 8px 28px rgba(255,255,255,.18),
-      0 2px 6px rgba(0,0,0,.3);
+      0 10px 32px rgba(255,255,255,.22),
+      0 2px 8px rgba(0,0,0,.3);
   }
-
   .btn-submit:hover::before { left: 150%; }
-  .btn-submit:active { transform: scale(.98); }
+  .btn-submit:active { transform: scale(.97) translateY(0); }
 
   /* OVERLAY */
   .overlay {
@@ -286,8 +398,13 @@
     align-items: center;
     justify-content: center;
     padding: 16px;
+    opacity: 0;
+    transition: opacity .4s var(--ease-smooth);
   }
-  .overlay.show { display: flex; }
+  .overlay.show {
+    display: flex;
+    animation: fadeIn .35s var(--ease-smooth) forwards;
+  }
 
   .resumo {
     background: rgba(10,16,30,.92);
@@ -296,14 +413,9 @@
     padding: 38px 34px;
     width: 100%;
     max-width: 490px;
-    backdrop-filter: blur(28px);
-    box-shadow: 0 32px 80px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.07);
-    animation: slideUp .3s cubic-bezier(.34,1.4,.64,1);
-  }
-
-  @keyframes slideUp {
-    from { opacity:0; transform:translateY(24px) scale(.97); }
-    to   { opacity:1; transform:translateY(0) scale(1); }
+    box-shadow: 0 32px 80px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.07);
+    animation: scaleIn .45s var(--ease-spring) both;
+    transform-origin: center bottom;
   }
 
   .resumo-label {
@@ -378,10 +490,25 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: opacity .2s, transform .15s;
+    transition: opacity .2s, transform .2s var(--ease-spring), box-shadow .3s;
     box-shadow: 0 4px 16px rgba(34,197,94,.25);
+    position: relative;
+    overflow: hidden;
   }
-  .btn-wpp:hover { opacity:.9; transform: translateY(-1px); }
+  .btn-wpp::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.3) 50%, transparent 70%);
+    transition: left .5s ease;
+  }
+  .btn-wpp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(34,197,94,.35);
+  }
+  .btn-wpp:hover::before { left: 150%; }
+  .btn-wpp:active { transform: scale(.97); }
 
   .btn-editar {
     padding: 14px 22px;
@@ -396,9 +523,18 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: border-color .2s, color .2s;
+    transition: border-color .25s, color .25s, transform .2s var(--ease-spring), background .25s;
   }
-  .btn-editar:hover { border-color: rgba(255,255,255,.2); color: #94a3b8; }
+  .btn-editar:hover {
+    border-color: rgba(255,255,255,.2);
+    color: #94a3b8;
+    background: rgba(255,255,255,.03);
+    transform: translateY(-1px);
+  }
+  .btn-editar:active { transform: scale(.97); }
+
+  /* Magnetic hover for turno buttons */
+  .turno-btn { will-change: transform; }
 
   @media (max-width: 720px) {
     .grid { grid-template-columns: 1fr; gap: 36px; }
@@ -535,7 +671,7 @@
     <hr class="resumo-divider"/>
 
     <p class="resumo-aviso">
-      Ao continuar, abriremos o WhatsApp da nutricionista com sua mensagem
+      Ao continuar, abriremos o WhatsApp com sua mensagem
       pronta para envio. A confirmação do horário acontece pela equipe.
     </p>
 
@@ -577,7 +713,12 @@
   }
 
   function fecharResumo() {
-    document.getElementById('overlay').classList.remove('show');
+    const overlay = document.getElementById('overlay');
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.classList.remove('show');
+      overlay.style.opacity = '';
+    }, 350);
   }
 
   function enviarWpp() {
@@ -586,7 +727,7 @@
     const objetivo = document.getElementById('objetivo').value.trim();
 
     const msg =
-      `Olá! Tudo bem? Gostaria de agendar um acompanhamento na Clínica Escola de Nutrição.\n` +
+      `Olá! Tudo bem? Gostaria de agendar um acompanhamento nutricional.\n` +
       `*Nome:* ${nome}\n` +
       `*Idade:* ${idade || 'Não informada'}\n` +
       `*Turno preferido:* ${turnoSelecionado}\n` +
@@ -595,9 +736,46 @@
     window.open(`https://wa.me/5511920069644?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
+  // Fechar overlay ao clicar fora
   document.getElementById('overlay').addEventListener('click', function(e) {
     if (e.target === this) fecharResumo();
   });
+
+  // Magnetic effect nos botões de turno
+  document.querySelectorAll('.turno-btn').forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.18;
+      const dy = (e.clientY - cy) * 0.18;
+      btn.style.transform = `translate(${dx}px, ${dy - 2}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = btn.classList.contains('selected') ? 'translateY(-2px)' : '';
+    });
+  });
+
+  // Ripple no botão submit
+  document.querySelector('.btn-submit').addEventListener('click', function(e) {
+    const ripple = document.createElement('span');
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.cssText = `
+      position:absolute; border-radius:50%; pointer-events:none;
+      width:${size}px; height:${size}px;
+      left:${e.clientX - rect.left - size/2}px;
+      top:${e.clientY - rect.top - size/2}px;
+      background:rgba(0,0,0,.08);
+      transform:scale(0); animation:rippleAnim .5s ease-out forwards;
+    `;
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 500);
+  });
+
+  const style = document.createElement('style');
+  style.textContent = `@keyframes rippleAnim { to { transform:scale(2.5); opacity:0; } }`;
+  document.head.appendChild(style);
 </script>
 </body>
 </html>
